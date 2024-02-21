@@ -12,20 +12,11 @@ project(
 
 include(cmake/variables.cmake)
 
+find_package(json-c CONFIG)
+find_package(CURL REQUIRED)
+
 # ---- Declare library ----
 
-add_library(
-    tmdb-api-try_lib OBJECT
-    source/lib.c
-)
-
-target_include_directories(
-    tmdb-api-try_lib ${warning_guard}
-    PUBLIC
-    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>"
-)
-
-target_compile_features(tmdb-api-try_lib PUBLIC c_std_99)
 
 # ---- Declare executable ----
 
@@ -36,7 +27,8 @@ set_property(TARGET tmdb-api-try_exe PROPERTY OUTPUT_NAME tmdb-api-try)
 
 target_compile_features(tmdb-api-try_exe PRIVATE c_std_99)
 
-target_link_libraries(tmdb-api-try_exe PRIVATE tmdb-api-try_lib)
+target_link_libraries(tmdb-api-try_exe PRIVATE json-c::json-c)
+target_link_libraries(tmdb-api-try_exe PRIVATE ${CURL_LIBRARIES})
 
 # ---- Install rules ----
 

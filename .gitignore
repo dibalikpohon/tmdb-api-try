@@ -5,7 +5,9 @@
 build/
 cmake-build-*/
 prefix/
+Debug/
 .clangd
 CMakeLists.txt.user
 CMakeUserPresets.json
 compile_commands.json
+.pat
