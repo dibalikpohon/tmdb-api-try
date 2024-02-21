@@ -26,3 +26,6 @@ if(NOT PROJECT_IS_TOP_LEVEL)
     set(warning_guard SYSTEM)
   endif()
 endif()
+
+# ----- compile commands ------
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
