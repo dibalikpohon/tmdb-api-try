@@ -124,7 +124,7 @@ int main(int argc, char const *argv[])
   }
 
   struct search_movie_result_s *search_movie_result = search_movie_result_new();
-  search_movie_result_parse_from_json(&search_movie_result, object);
+  search_movie_result_parse_from_json(search_movie_result, object);
 
   puts("Here are some results of your search:");
   printf("Page: %zu\n", search_movie_result->page);
@@ -150,7 +150,7 @@ int main(int argc, char const *argv[])
 
   puts("i'm done");
 
-  search_movie_result_free(&search_movie_result);
+  search_movie_result_free(search_movie_result);
 
 cleanup_10:
   json_object_put(object);

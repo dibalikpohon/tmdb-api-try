@@ -6,11 +6,9 @@ static struct movie_result_s **parse_movie_results_array(
     const struct json_object *movie_results_object);
 
 void search_movie_result_parse_from_json(
-    struct search_movie_result_s **search_movie_result_p,
+    struct search_movie_result_s *search_movie_result,
     const struct json_object      *jobj)
 {
-  struct search_movie_result_s *search_movie_result = *search_movie_result_p;
-
   struct json_object *page_object = NULL;
   json_object_object_get_ex(page_object, "page", &page_object);
   search_movie_result->page = json_object_get_uint64(page_object);
@@ -42,7 +40,7 @@ static struct movie_result_s **parse_movie_results_array(
         json_object_array_get_idx(movie_results_object, i);
     struct movie_result_s *movie_result = movie_result_new();
     movie_results[i]                    = movie_result;
-    movie_result_parse_from_json(&movie_results[i], movie_result_o);
+    movie_result_parse_from_json(movie_results[i], movie_result_o);
   }
 
   return movie_results;

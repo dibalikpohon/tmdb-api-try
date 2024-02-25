@@ -6,11 +6,9 @@
 static uint64_t *parse_genre_ids_array(
     const struct json_object *genre_ids_object);
 
-void movie_result_parse_from_json(struct movie_result_s   **movie_result_p,
+void movie_result_parse_from_json(struct movie_result_s   *movie_result,
                                   const struct json_object *jobj)
 {
-  struct movie_result_s *movie_result = *movie_result_p;
-
   struct json_object *adult_json_object = NULL;
   json_object_object_get_ex(jobj, "adult", &adult_json_object);
   movie_result->adult = json_object_get_boolean(adult_json_object);

@@ -19,34 +19,32 @@ struct movie_result_s *movie_result_new()
   return result;
 }
 
-void movie_result_free(struct movie_result_s **result_p) {
-  if (result_p == NULL) { return; }
-  struct movie_result_s *result = *result_p; 
-  if (result == NULL) { return; }
+void movie_result_free(struct movie_result_s *movie_result) {
+  if (movie_result == NULL) { return; }
 
-  result->adult = 0;
+  movie_result->adult = 0;
 
-  arrfree(result->genre_ids);
-  result->genre_ids = NULL;
+  arrfree(movie_result->genre_ids);
+  movie_result->genre_ids = NULL;
   
-  result->id = 0;
+  movie_result->id = 0;
   
-  sdsfree(result->original_title);
-  result->original_title = NULL;
+  sdsfree(movie_result->original_title);
+  movie_result->original_title = NULL;
 
-  sdsfree(result->overview);
-  result->overview = NULL;
+  sdsfree(movie_result->overview);
+  movie_result->overview = NULL;
 
-  result->popularity = 0.;
+  movie_result->popularity = 0.;
 
-  sdsfree(result->release_date);
-  result->release_date = NULL;
+  sdsfree(movie_result->release_date);
+  movie_result->release_date = NULL;
 
-  sdsfree(result->title);
-  result->title = NULL;
+  sdsfree(movie_result->title);
+  movie_result->title = NULL;
 
-  result->vote_average = 0.;
-  result->vote_count = 0;
+  movie_result->vote_average = 0.;
+  movie_result->vote_count = 0;
 
-  free(result);
+  free(movie_result);
 }

@@ -15,20 +15,18 @@ struct search_movie_result_s *search_movie_result_new()
   return result;
 };
 
-void search_movie_result_free(struct search_movie_result_s **result_p)
+void search_movie_result_free(struct search_movie_result_s *search_movie_result)
 {
-  struct search_movie_result_s *result = *result_p;
-
-  result->page          = 0;
-  result->total_page    = 0;
-  result->total_results = 0;
+  search_movie_result->page          = 0;
+  search_movie_result->total_page    = 0;
+  search_movie_result->total_results = 0;
 
   // free all lists of result
-  size_t results_len = arrlenu(result->results);
+  size_t results_len = arrlenu(search_movie_result->results);
   for (size_t i = 0; i < results_len; i++) {
-    movie_result_free(&result->results[i]);
+    movie_result_free(search_movie_result->results[i]);
   }
-  arrfree(result->results);
+  arrfree(search_movie_result->results);
 
-  result->results = NULL;
+  search_movie_result->results = NULL;
 }
