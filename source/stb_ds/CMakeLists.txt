@@ -1,0 +1,1 @@
+set(stb_ds_h ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
