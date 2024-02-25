@@ -15,7 +15,10 @@ include(cmake/variables.cmake)
 find_package(json-c CONFIG)
 find_package(CURL REQUIRED)
 
-# ---- Declare library ----
+add_subdirectory(source/sds)
+add_subdirectory(source/stb_ds)
+add_subdirectory(source/movie_result)
+add_subdirectory(source/search_movie_result)
 
 
 # ---- Declare executable ----
@@ -29,6 +32,12 @@ target_compile_features(tmdb-api-try_exe PRIVATE c_std_99)
 
 target_link_libraries(tmdb-api-try_exe PRIVATE json-c::json-c)
 target_link_libraries(tmdb-api-try_exe PRIVATE ${CURL_LIBRARIES})
+target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:sds>)
+target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:movie_result>)
+target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:search_movie_result>)
+
+target_include_directories(tmdb-api-try_exe PRIVATE ${sds_h})
+target_include_directories(tmdb-api-try_exe PRIVATE ${stb_ds_h})
 
 # ---- Install rules ----
 
