@@ -69,12 +69,12 @@ int main(int argc, char const *argv[])
 
   struct curl_slist *header_list = curl_slist_append(NULL, auth_header);
   sdsfree(auth_header);
-
   if (header_list == NULL) {
     puts("ono, something happened!");
     errcode = -2;
     goto cleanup_7;
   }
+
   {
     struct curl_slist *temp_list =
         curl_slist_append(header_list, "accept: application/json");
@@ -117,7 +117,7 @@ int main(int argc, char const *argv[])
   }
 
   if (!json_object_is_type(object, json_type_object)) {
-    puts("Huh? It's not a type?");
+    puts("Huh? It's not an object?");
     errcode = 3;
 
     goto cleanup_10;
