@@ -55,18 +55,6 @@ void movie_result_parse_from_json(struct movie_result_s   *movie_result,
   struct json_object *vote_count_object = NULL;
   json_object_object_get_ex(jobj, "vote_count", &vote_count_object);
   movie_result->vote_count = json_object_get_uint64(vote_count_object);
-
-  // free allocated json object
-  json_object_put(adult_json_object);
-  json_object_put(genre_ids_object);
-  json_object_put(id_object);
-  json_object_put(original_title_object);
-  json_object_put(overview_object);
-  json_object_put(popularity_object);
-  json_object_put(release_date_object);
-  json_object_put(title_object);
-  json_object_put(vote_average_object);
-  json_object_put(vote_count_object);
 }
 
 static uint64_t *parse_genre_ids_array(
