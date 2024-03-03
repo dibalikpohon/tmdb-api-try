@@ -22,6 +22,10 @@ const struct movie_genre_s *movie_genre_get_genre(uint64_t genre_id) {
 const char *movie_genre_id_to_string(uint64_t genre_id) {
   const struct movie_genre_s *movie_genre = movie_genre_get_genre(genre_id);
 
+  if (movie_genre == NULL) {
+    return NULL;
+  }
+
   return movie_genre->name;
 }
 
