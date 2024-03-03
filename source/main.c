@@ -11,6 +11,7 @@
 #include "movie_result/movie_result.h"
 #include "sds/sds.h"
 #include "search_movie_result/search_movie_result.h"
+#include "movie_genre/movie_genre.h"
 
 #define STB_DS_IMPLEMENTATION
 #include "stb_ds/stb_ds.h"
@@ -22,6 +23,9 @@ size_t data_response_write(char  *ptr,
                            size_t size,
                            size_t nmemb,
                            void  *userdata);
+
+
+CURL *curl;
 
 int main(int argc, char const *argv[])
 {
@@ -48,13 +52,15 @@ int main(int argc, char const *argv[])
     search_input = inputted;
   }
 
-  CURL *curl = curl_easy_init();
+  curl = curl_easy_init();
   if (!curl) {
     puts("Awwie, CURL cannot init!");
 
     errcode = -2;
     goto cleanup_6;
   }
+
+  movie_genre_init("en");
 
   // remove the newline of the fgets
   search_input[strlen(search_input) - 1] = 0;
