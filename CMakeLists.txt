@@ -20,7 +20,7 @@ add_subdirectory(source/sds)
 add_subdirectory(source/stb_ds)
 add_subdirectory(source/movie_result)
 add_subdirectory(source/search_movie_result)
-# add_subdirectory(source/movie_genre)
+add_subdirectory(source/movie_genre)
 
 
 # ---- Declare executable ----
@@ -37,7 +37,7 @@ target_link_libraries(tmdb-api-try_exe PRIVATE ${CURL_LIBRARIES})
 target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:sds>)
 target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:movie_result>)
 target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:search_movie_result>)
-# target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:movie_genre>)
+target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:movie_genre>)
 
 target_include_directories(tmdb-api-try_exe PRIVATE ${sds_h})
 target_include_directories(tmdb-api-try_exe PRIVATE ${stb_ds_h})
