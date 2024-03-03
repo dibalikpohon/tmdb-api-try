@@ -10,6 +10,7 @@ project(
     LANGUAGES C
 )
 
+list(APPEND CMAKE_PREFIX_PATH /home/karuntos/curl8)
 include(cmake/variables.cmake)
 
 find_package(json-c CONFIG)
@@ -19,6 +20,7 @@ add_subdirectory(source/sds)
 add_subdirectory(source/stb_ds)
 add_subdirectory(source/movie_result)
 add_subdirectory(source/search_movie_result)
+# add_subdirectory(source/movie_genre)
 
 
 # ---- Declare executable ----
@@ -35,6 +37,7 @@ target_link_libraries(tmdb-api-try_exe PRIVATE ${CURL_LIBRARIES})
 target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:sds>)
 target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:movie_result>)
 target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:search_movie_result>)
+# target_link_libraries(tmdb-api-try_exe PRIVATE $<TARGET_OBJECTS:movie_genre>)
 
 target_include_directories(tmdb-api-try_exe PRIVATE ${sds_h})
 target_include_directories(tmdb-api-try_exe PRIVATE ${stb_ds_h})
