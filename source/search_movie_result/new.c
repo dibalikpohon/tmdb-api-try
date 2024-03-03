@@ -29,4 +29,6 @@ void search_movie_result_free(struct search_movie_result_s *search_movie_result)
   arrfree(search_movie_result->results);
 
   search_movie_result->results = NULL;
+
+  free(search_movie_result);
 }
