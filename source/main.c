@@ -8,10 +8,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "movie_genre/movie_genre.h"
 #include "movie_result/movie_result.h"
 #include "sds/sds.h"
 #include "search_movie_result/search_movie_result.h"
-#include "movie_genre/movie_genre.h"
 
 #define STB_DS_IMPLEMENTATION
 #include "stb_ds/stb_ds.h"
@@ -19,11 +19,13 @@
 #define MAX_SEARCH_INPUT 120
 #define MAX_URL_LENGTH   480
 
-size_t data_response_write(char  *ptr,
-                           size_t size,
-                           size_t nmemb,
-                           void  *userdata);
+static size_t data_response_write(char  *ptr,
+                                  size_t size,
+                                  size_t nmemb,
+                                  void  *userdata);
 
+static void print_search_movie_result(
+    struct search_movie_result_s *search_movie_result, size_t len);
 
 CURL *curl;
 
@@ -52,15 +54,18 @@ int main(int argc, char const *argv[])
     search_input = inputted;
   }
 
-  curl = curl_easy_init();
+  curl    = curl_easy_init();
+  errcode = movie_genre_init("en");
+  if (errcode) {
+    puts("Haiyaa, cURL is a failure");
+    goto cleanup_8;
+  }
   if (!curl) {
     puts("Awwie, CURL cannot init!");
 
     errcode = -2;
     goto cleanup_6;
   }
-
-  movie_genre_init("en");
 
   // remove the newline of the fgets
   search_input[strlen(search_input) - 1] = 0;
@@ -69,9 +74,9 @@ int main(int argc, char const *argv[])
 
   sds formatted_url = sdscatfmt(sdsempty(), url_format, search_input_escape);
 
-  const char        *auth_header_head = "Authorization: Bearer ";
-  const char        *auth_token       = getenv("TMDB_AUTH_TOKEN");
-  sds                auth_header = sdscat(sdsnew(auth_header_head), auth_token);
+  const char *auth_header_head = "Authorization: Bearer ";
+  const char *auth_token       = getenv("TMDB_AUTH_TOKEN");
+  sds         auth_header      = sdscat(sdsnew(auth_header_head), auth_token);
 
   struct curl_slist *header_list = curl_slist_append(NULL, auth_header);
   sdsfree(auth_header);
@@ -98,6 +103,7 @@ int main(int argc, char const *argv[])
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header_list);
 
   puts("Please wait while we are searching for you, you lazy shrek...");
+
   CURLcode result = curl_easy_perform(curl);
 
   if (result != CURLE_OK) {
@@ -140,19 +146,7 @@ int main(int argc, char const *argv[])
   size_t result_len = arrlenu(search_movie_result->results);
   printf("There are %zu items in the current page:\n", result_len);
 
-  for (size_t i = 0; i < result_len; i++) {
-    struct movie_result_s *movie_result = search_movie_result->results[i];
-    printf("=====%s=====\n", movie_result->title);
-    printf("* Original Title: %s\n", movie_result->original_title);
-    printf("* Overview: %s\n", movie_result->overview);
-    printf("* Release date: %s\n", movie_result->release_date);
-    printf("* Popularity: %lf\n", movie_result->popularity);
-    printf("* Vote average: %lf\n", movie_result->vote_average);
-    printf("* Vote count: %zu\n", movie_result->vote_count);
-    printf("* Is this adult movie? %s\n",
-           movie_result->adult == 1 ? "yes" : "no");
-    puts("");
-  }
+  print_search_movie_result(search_movie_result, result_len);
 
   puts("i'm done");
 
@@ -192,4 +186,44 @@ size_t data_response_write(char *ptr, size_t size, size_t nmemb, void *userdata)
   *(char **)userdata = data;
 
   return real_size;
+}
+
+void print_search_movie_result(
+    struct search_movie_result_s *search_movie_result, size_t len)
+{
+  for (size_t i = 0; i < len; i++) {
+    struct movie_result_s *movie_result = search_movie_result->results[i];
+    printf("=====%s=====\n", movie_result->title);
+    printf("* Original Title: %s\n", movie_result->original_title);
+
+    {
+      printf("* Genre: ");
+      genre_id *genre_ids    = movie_result->genre_ids;
+      size_t    genre_id_len = arrlenu(genre_ids);
+      if (genre_id_len > 0) {
+        for (size_t i = 0; i < genre_id_len - 1; i++) {
+          const char *genre_name = movie_genre_id_to_string(genre_ids[i]);
+          if (genre_name == NULL) {
+            continue;
+          }
+          printf("%s, ", genre_name);
+        }
+        const char *genre_name =
+            movie_genre_id_to_string(genre_ids[genre_id_len - 1]);
+        if (genre_name != NULL) {
+          printf("%s", genre_name);
+        }
+      }
+      puts("");
+    }
+
+    printf("* Overview: %s\n", movie_result->overview);
+    printf("* Release date: %s\n", movie_result->release_date);
+    printf("* Popularity: %lf\n", movie_result->popularity);
+    printf("* Vote average: %lf\n", movie_result->vote_average);
+    printf("* Vote count: %zu\n", movie_result->vote_count);
+    printf("* Is this adult movie? %s\n",
+           movie_result->adult == 1 ? "yes" : "no");
+    puts("");
+  }
 }
