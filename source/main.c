@@ -27,6 +27,8 @@ static size_t data_response_write(char  *ptr,
 static void print_search_movie_result(
     struct search_movie_result_s *search_movie_result, size_t len);
 
+// This will be shared to these translation units:
+// movie_genre/init.c
 CURL *curl;
 
 int main(int argc, char const *argv[])

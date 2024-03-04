@@ -13,6 +13,8 @@ extern struct movie_genre_hm_s *movie_genres_hm;
 extern void movie_genre_s_parse_from_json(struct movie_genre_s     *movie_genre,
                                           const struct json_object *jobj);
 
+// Shared from this translation unit:
+// main.c
 extern CURL *curl;
 
 const struct movie_genre_hm_s movie_genre_hm_empty = {
