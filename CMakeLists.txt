@@ -10,7 +10,7 @@ project(
     LANGUAGES C
 )
 
-list(APPEND CMAKE_PREFIX_PATH /home/karuntos/curl8)
+# list(APPEND CMAKE_PREFIX_PATH /home/karuntos/curl8)
 include(cmake/variables.cmake)
 
 find_package(json-c CONFIG)
